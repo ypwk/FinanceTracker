@@ -2,20 +2,19 @@ import React, { Component } from 'react';
 import StorageUtils from 'utils/storage';
 
 import Navi from './Navi';
-import PlaidLink from './PlaidLink';
 
-interface LoginProps {
+interface SummaryProps {
   storageUtil: StorageUtils;
 }
 
-interface LoginState {
+interface SummaryState {
   data: string;
 }
 // eslint-disable-next-line react/prefer-stateless-function
-class Login extends Component<LoginProps, LoginState> {
+class Summary extends Component<SummaryProps, SummaryState> {
   storageUtil: StorageUtils;
 
-  constructor(props: LoginProps) {
+  constructor(props: SummaryProps) {
     super(props);
     this.storageUtil = props.storageUtil;
   }
@@ -24,10 +23,10 @@ class Login extends Component<LoginProps, LoginState> {
     return (
       <div>
         <Navi />
-        <PlaidLink storageUtil={this.storageUtil} />
+        <p>haha</p>
       </div>
     );
   }
 }
 
-export default Login;
+export default Summary;

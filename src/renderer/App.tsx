@@ -2,11 +2,13 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { Component } from 'react';
 import { RevolvingDot } from 'react-loader-spinner';
 import Home from 'components/Home';
-import Login from 'components/Login';
+import Settings from 'components/Settings';
+import Summary from 'components/Summary';
+
 import StorageUtils from 'utils/storage';
 
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import './Skeleton.css';
 
 interface AppState {
   loading: boolean;
@@ -53,8 +55,12 @@ class App extends Component<any, AppState> {
         <Routes>
           <Route path="/" element={<Home storageUtil={this.storageHelper} />} />
           <Route
-            path="/login/"
-            element={<Login storageUtil={this.storageHelper} />}
+            path="/settings/"
+            element={<Settings storageUtil={this.storageHelper} />}
+          />
+          <Route
+            path="/summary/"
+            element={<Summary storageUtil={this.storageHelper} />}
           />
         </Routes>
       </Router>

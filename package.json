@@ -108,18 +108,19 @@
     }
   },
   "dependencies": {
+    "axios": "0.27.2",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^5.2.2",
+    "localforage": "1.10.0",
+    "moment": "2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.3.0",
-    "bootstrap": "5.2.0",
-    "moment": "2.29.4",
-    "axios": "0.27.2",
+    "react-loader-spinner": "5.3.4",
     "react-plaid-link": "3.3.2",
-    "localforage": "1.10.0",
-    "react-loader-spinner": "5.3.4"
+    "react-router-dom": "^6.3.0",
+    "styled-components": "5.3.5",
+    "framer-motion": "7.3.6"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
@@ -131,6 +132,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/styled-components": "^5.1.26",
     "@types/terser-webpack-plugin": "^5.0.4",
     "@types/webpack-bundle-analyzer": "^4.4.2",
     "@typescript-eslint/eslint-plugin": "^5.33.1",

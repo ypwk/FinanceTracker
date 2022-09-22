@@ -35,6 +35,8 @@ class Home extends Component<HomeProps, any> {
 
     this.state = { transactions: null };
 
+    // this.getTransactions();
+
     this.getTransactions = this.getTransactions.bind(this);
   }
 
@@ -79,28 +81,39 @@ class Home extends Component<HomeProps, any> {
 
   render() {
     const { transactions } = this.state;
-
+    let balance = 0;
+    if (transactions) {
+      balance = transactions.latest_transactions.reduce(
+        (ps: number, a: { amount: number }) => ps - a.amount,
+        0
+      );
+    }
     const tableContents = () => {
       return (
-        <table className="table table-striped table-bordered">
-          <thead>
-            <tr>
-              <th>Amount</th>
-              <th>Category</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.latest_transactions &&
-              transactions.latest_transactions.map((trans: any) => (
-                <tr key={trans.transaction_id}>
-                  <td>{trans.amount}</td>
-                  <td>{JSON.stringify(trans.category)}</td>
-                  <td>{trans.name}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div>
+          <h1>{balance}</h1>
+          <table className="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Name</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.latest_transactions &&
+                transactions.latest_transactions.map((trans: any) => (
+                  <tr key={trans.transaction_id}>
+                    <td>{trans.amount}</td>
+                    <td>{JSON.stringify(trans.category)}</td>
+                    <td>{trans.name}</td>
+                    <td>{trans.date}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       );
     };
 
