@@ -1,0 +1,30 @@
+account_id: "BXd1Yerw8Qhngq0d0an7ujxErYQAkVFQyYBZN"
+account_owner: null
+amount: 300
+authorized_date: null
+authorized_datetime: null
+balance: 280.52
+category: (3) ['Transfer', 'Withdrawal', 'Check']
+category_id: "21012001"
+check_number: "00000000102"
+date: "2021-03-11"
+datetime: null
+iso_currency_code: "USD"
+location: {address: null, city: null, country: null, lat: null, lon: null, …}
+merchant_name: null
+name: "CHECK #102"
+payment_channel: "other"
+payment_meta: {by_order_of: null, payee: null, payer: null, payment_method: null, payment_processor: null, …}
+pending: false
+pending_transaction_id: null
+personal_finance_category: null
+transaction_code: null
+transaction_id: "aO0yrBeMj1HKEZm9meKLCRdY8mZLxRH9m0Zz4"
+transaction_type: "special"
+unofficial_currency_code: null
+
+available: 6024.07
+current: 6024.07
+iso_currency_code: "USD"
+limit: null
+unofficial_currency_code: null

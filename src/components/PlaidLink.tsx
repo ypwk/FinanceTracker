@@ -60,8 +60,18 @@ const PlaidLink = (props: PlaidLinkProps) => {
         );
         const resJSON = await response.json();
         if (resJSON.item_id != null && resJSON.access_token != null) {
-          storageUtil.itemAccess.push([resJSON.item_id, resJSON.access_token]);
-          storageUtil.saveData();
+          storageUtil.itemAccess.push({
+            itemId: resJSON.item_id,
+            accessToken: resJSON.access_token,
+          });
+          storageUtil.finInfo.push({
+            itemId: resJSON.item_id,
+            balance: 0,
+            transactionHistory: [],
+            dateLastAccess: 0,
+          });
+          storageUtil.saveData('itemaccess');
+          storageUtil.saveData('fininfo');
         }
       };
       sendPublicToken();
@@ -81,7 +91,6 @@ const PlaidLink = (props: PlaidLinkProps) => {
       <button type="button" onClick={() => open()} disabled={!ready}>
         Connect a bank account
       </button>
-      <p>{JSON.stringify(storageUtil.itemAccess)}</p>
     </div>
   );
 };

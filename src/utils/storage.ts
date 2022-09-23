@@ -6,12 +6,32 @@ import localForage from 'localforage';
  *
  * Maintains a local representation of item id and access tokens in the following format:
  * A list of item id and access token pairs.
+ *
+ * Financial information (transaction history) is stored as follows:
+ * [item id, balance, [transaction history], date last accessed]
  */
 
+type ItemAccessPair = { itemId: string; accessToken: string };
+type ItemAccessList = Array<ItemAccessPair>;
+type FinancialInfoTuple = {
+  itemId: string;
+  balance: number;
+  transactionHistory: Array<object>;
+  dateLastAccess: number;
+};
+type FinancialInfoList = Array<FinancialInfoTuple>;
+
 class StorageUtils {
+  itemAccess: ItemAccessList;
+
+  finInfo: FinancialInfoList;
+
+  checkedOut: boolean;
+
   constructor() {
     // state
     this.itemAccess = [];
+    this.finInfo = [];
     this.checkedOut = false;
     // initialize localForage
     localForage.config({
@@ -42,6 +62,7 @@ class StorageUtils {
     console.log('First startup, initializing storage components.');
     localForage.setItem('firsttimeflag', true);
     localForage.setItem('itemaccess', this.itemAccess);
+    localForage.setItem('fininfo', this.finInfo);
   }
 
   /**
@@ -50,9 +71,24 @@ class StorageUtils {
    * @param {*} callback is for a loading spinner
    */
   async fetchData() {
+    this.checkedOut = true;
     try {
-      const data = await localForage.getItem('itemaccess');
-      this.itemAccess = data;
+      const data: ItemAccessList | null = await localForage.getItem(
+        'itemaccess'
+      );
+      if (data) {
+        this.itemAccess = data;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    try {
+      const data: FinancialInfoList | null = await localForage.getItem(
+        'fininfo'
+      );
+      if (data) {
+        this.finInfo = data;
+      }
     } catch (err) {
       console.log(err);
     }
@@ -63,7 +99,7 @@ class StorageUtils {
    *
    * @param {*} callback is for a loading spinner
    */
-  saveAndClose(callback) {
+  saveAndClose(callback: () => void) {
     if (this.checkedOut === false) {
       console.log(
         'storageUtils: trying to save data that has not been fetched.'
@@ -82,6 +118,18 @@ class StorageUtils {
         throw error;
       });
 
+    // save financial information data
+    localForage
+      .setItem('fininfo', this.finInfo)
+      .then((value) => {
+        const tmp = this.finInfo;
+        this.finInfo = [];
+        return tmp;
+      })
+      .catch((error) => {
+        throw error;
+      });
+
     this.checkedOut = false;
     callback();
   }
@@ -89,10 +137,20 @@ class StorageUtils {
   /**
    * Saves data to system
    */
-  saveData() {
-    localForage.setItem('itemaccess', this.itemAccess).catch((error) => {
-      throw error;
-    });
+  saveData(item: string) {
+    if (item === 'itemaccess') {
+      localForage.setItem(item, this.itemAccess).catch((error) => {
+        throw error;
+      });
+    } else if (item === 'fininfo') {
+      localForage.setItem(item, this.finInfo).catch((error) => {
+        throw error;
+      });
+    } else {
+      throw new Error(
+        `Invalid argument error: ${item} is not a supported value.`
+      );
+    }
   }
 }
 
