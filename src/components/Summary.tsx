@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import {
   AreaChart,
   Area,
@@ -17,6 +17,7 @@ import { Keys } from 'server/auth/config';
 
 import LabelPie from './LabelPie';
 import Navi from './Navi';
+import DropDown from './DropDown';
 
 const ChartContainer = styled.div`
   display: flex;
@@ -45,6 +46,7 @@ interface SummaryProps {
 }
 
 interface SummaryState {
+  currBank: number;
   transactions: any | null;
   balance: any | null;
 }
@@ -74,15 +76,28 @@ class Summary extends Component<SummaryProps, SummaryState> {
     this.storageUtil = props.storageUtil;
 
     this.state = {
+      currBank: 0,
       transactions: this.storageUtil.finInfo[0].transactionHistory,
       balance: this.storageUtil.finInfo[0].balance,
     };
 
     this.fetchUpdate = this.fetchUpdate.bind(this);
+    this.setCurrentBank = this.setCurrentBank.bind(this);
   }
 
   componentDidMount(): void {
     this.fetchUpdate();
+  }
+
+  setCurrentBank(event: ChangeEvent<HTMLSelectElement>) {
+    if (event.target) {
+      const evtInfo = parseInt(event.target.value, 10);
+      this.setState({
+        currBank: evtInfo,
+        transactions: this.storageUtil.finInfo[evtInfo].transactionHistory,
+        balance: this.storageUtil.finInfo[evtInfo].balance,
+      });
+    }
   }
 
   fetchUpdate() {
@@ -183,7 +198,25 @@ class Summary extends Component<SummaryProps, SummaryState> {
   }
 
   render() {
-    const { transactions, balance } = this.state;
+    const { transactions, balance, currBank } = this.state;
+    if (transactions === null || balance === null) {
+      return (
+        <div>
+          <Navi message="Spend Summary" />
+          <div>
+            <div className="row">
+              <div className="one-half column">
+                <Header>Please add a bank account</Header>
+              </div>
+            </div>
+            <p>
+              Uhoh, it looks like you have yet to add a bank account. Please do
+              so and then return to this page.
+            </p>
+          </div>
+        </div>
+      );
+    }
     let tbal = 0;
     let cumulativeBalance = [];
     const spendCategoryDict: {
@@ -264,6 +297,16 @@ class Summary extends Component<SummaryProps, SummaryState> {
       <div>
         <Navi message="Spend Summary" />
         <div>
+          <div className="row">
+            <DropDown
+              label="Select a financial institution: "
+              options={this.storageUtil.itemAccess.map((v, i) => {
+                return { label: `Institution ${i}`, value: i };
+              })}
+              value={currBank}
+              onChange={this.setCurrentBank}
+            />
+          </div>
           <div className="row">
             <div className="one-half column">
               <Header>Balance History</Header>
